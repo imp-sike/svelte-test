@@ -11,7 +11,7 @@
 
 
         msgs = msgs;
-        socket = new WebSocket("wss://1825-150-107-106-30.in.ngrok.io");
+        socket = new WebSocket("wss://ws-server-1001.herokuapp.com/");
         socket.addEventListener("open", () => {
             console.log("Opened");
         });
