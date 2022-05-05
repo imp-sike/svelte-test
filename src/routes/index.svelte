@@ -21,6 +21,7 @@
 
         socket.onopen = function () {
             ready = !ready;
+            socket.send(randomUsername+" joined the chat room!")
         };
 
         // sendMsg() = function {
