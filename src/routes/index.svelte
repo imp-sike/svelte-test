@@ -8,6 +8,8 @@
     var randomUsername = "_" + Math.random().toString(36).substring(2, 9);
 
     onMount(() => {
+
+
         msgs = msgs;
         socket = new WebSocket("wss://1825-150-107-106-30.in.ngrok.io");
         socket.addEventListener("open", () => {
@@ -21,12 +23,13 @@
 
         socket.onopen = function () {
             ready = !ready;
-            socket.send(randomUsername+" joined the chat room!")
+            socket.send(randomUsername + " joined the chat room!");
         };
 
         // sendMsg() = function {
         //     socket.send(usrMsg)
         // }
+
     });
 
     const sendMessage = () => {
@@ -35,97 +38,183 @@
     };
 </script>
 
-<div class="container">
-    <div class="header">You are {randomUsername} hai ta</div>
+<section class="chatbox">
+    <section class="chat-window">
 
-    <div class="msg-container">
         {#each msgs as msg}
          {#if msg.includes(randomUsername)}
-            <div class="message sent">
-               {msg}
-           </div> 
+         <article class="msg-container msg-self" id="msg-0">
+            <div class="msg-box">
+                <div class="flr">
+                    <div class="messages">
+                        <p class="msg" id="msg-0">
+                            {msg}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </article>
         {:else}
-        <div class="message">
-            {msg}
-        </div> 
+        <article class="msg-container msg-remote" id="msg-0">
+            <div class="msg-box">
+                <div class="flr">
+                    <div class="messages">
+                        <p class="msg" id="msg-0">
+                          {msg}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </article>
       
          {/if}    
 
             
         {/each}
-    </div>
 
-    {#if ready}
-     
-        <input
-            type="text"
-            class="msgBox"
-            bind:value={usrMsg}
-            placeholder="Type your msg here..."
-        />
-        <button class="submit" on:click={sendMessage}>Send</button>
-    {/if}
-</div>
+
+    </section>
+    <form class="chat-input" onsubmit="return false;">
+        <input type="text" autocomplete="on" placeholder="Type a message"   bind:value={usrMsg} />
+        <button on:click={sendMessage}>
+            Send
+        </button>
+    </form>
+</section>
+
+
 
 <style>
- 
-    .msgBox {
-        width: 60vw;
-        margin: 10px;
-        border: none;
-        padding: 7px;
-        font-weight: bold;
-        position: absolute;
-        bottom: 0;
 
-        margin-bottom: 20px;
-        background-color: burlywood;
+    ::-webkit-scrollbar {
+        width: 4px;
     }
-
-    .submit{
-        width: 30vw;
-        background-color: blue;
-        border: none;
-        margin: 10px;
-        margin-bottom: 20px;
-        padding: 7px;
-        color: white;
-        font-weight: bold;
-        position: absolute;
-        bottom: 0;
-        right: 0;
+    ::-webkit-scrollbar-thumb {
+        background-color: #4c4c6a;
+        border-radius: 2px;
     }
-
-    .header {
-        text-align: center;
-        font-weight: bold;
-        padding: 10px;
-    }
-    .container {
-        background-color: aliceblue;
+    .chatbox {
         height: 100vh;
-        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
     }
-
-    .msg-container {
+    .chat-window {
+        flex: auto;
         padding: 10px;
+        max-height: calc(100% - 60px);
+        background: #2f323b;
+        overflow: auto;
     }
-
-    .message {
-        background-color: white;
-        color: black;
-        font-weight: bold;
-        padding-left: 15px;
-        padding-right: 15px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        margin: 15px;
-        border-radius: 25px;
+    .chat-input {
+        flex: 0 0 auto;
+        height: 60px;
+        background: #40434e;
+        border-top: 1px solid #2671ff;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
     }
-
-    .sent {
-        background-color: purple;
+    .chat-input input {
+        height: 59px;
+        line-height: 60px;
+        outline: 0 none;
+        border: none;
+        width: calc(100% - 60px);
+        color: white;
+        text-indent: 10px;
+        font-size: 12pt;
+        padding: 0;
+        background: #40434e;
+    }
+    .chat-input button {
+        float: right;
+        outline: 0 none;
+        border: none;
+        background: #2671ff;
+        height: 40px;
+        width: 40px;
+        border-radius: 20%;
+        margin: 10px;
+        transition: all 0.15s ease-in-out;
         color: white;
         font-weight: bold;
+    }
+  
+    .msg-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        margin-bottom: 2px;
+        padding: 0;
+    }
+    .msg-box {
+        display: flex;
+        background: #5b5e6c;
+        
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        border-radius: 0 6px 6px 0;
+        max-width: 80%;
+        width: auto;
+        float: left;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
+    }
+    .user-img {
+        display: inline-block;
+        border-radius: 50%;
+        height: 40px;
+        width: 40px;
+        background: #2671ff;
+        margin: 0 10px 10px 0;
+    }
+    .flr {
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: column;
+        width: calc(100% - 50px);
+    }
+    .messages {
+        flex: 1 0 auto;
+    }
+    .msg {
+        display: inline-block;
+        font-size: 11pt;
+        line-height: 13pt;
+        color: white;
+        font-weight: bold;
+        padding: 7px;
+        margin: 0 0 4px 0;
+    }
+    .msg:first-of-type {
+        margin-top: 8px;
+    }
+    .timestamp {
+        color: rgba(0, 0, 0, 0.38);
+        font-size: 8pt;
+        margin-bottom: 10px;
+    }
+    .username {
+        margin-right: 3px;
+    }
+    .posttime {
+        margin-left: 3px;
+    }
+    .msg-self .msg-box {
+        border-radius: 6px 0 0 6px;
+        background: #2671ff;
+        float: right;
+    }
+    .msg-self .user-img {
+        margin: 0 0 10px 10px;
+    }
+    .msg-self .msg {
+        text-align: right;
+    }
+    .msg-self .timestamp {
+        text-align: right;
     }
 </style>
